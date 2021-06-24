@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
+import { SyncWslAndWindowsDatabases } from '../database/SyncWslAndWindowsDatabases';
 import { CreateUserService } from '../services/CreateUserService';
 
 class CreateUserController {
+  @SyncWslAndWindowsDatabases
   async handle(req: Request, res: Response): Promise<Response> {
     const { name, email, admin } = req.body;
 
