@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import { SyncWslAndWindowsDatabases } from '../database/SyncWslAndWindowsDatabases';
 import { CreateTagService } from '../services/CreateTagService';
 
 class CreateTagController {
-  @SyncWslAndWindowsDatabases
   async handle(req: Request, res: Response): Promise<Response> {
     const { name } = req.body;
 

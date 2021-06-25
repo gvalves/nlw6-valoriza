@@ -1,8 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { CreateTagController } from './controllers/CreateTagController';
 import { CreateUserController } from './controllers/CreateUserController';
-import { syncWslAndWindowsDatabases } from './database/SyncWslAndWindowsDatabases';
-import { asyncFunctionConcat } from './libs/asyncFunctionConcat';
+import { syncWslAndWindowsDatabases } from './database/syncWslAndWindowsDatabases';
 import { ensureAdmin } from './middlewares/ensureAdmin';
 
 const router = Router();
@@ -17,7 +16,11 @@ router.post('/users', (req: Request, res: Response) => {
   })();
 });
 
-// eslint-disable-next-line
-router.post('/tags', ensureAdmin, createTagController.handle);
+router.post('/tags', ensureAdmin, (req: Request, res: Response) => {
+  (async () => {
+    await createTagController.handle(req, res);
+    syncWslAndWindowsDatabases();
+  })();
+});
 
 export { router };

@@ -1,13 +1,12 @@
 import fs from 'fs';
 import { config } from 'dotenv';
 
-import { isUsingWsl } from '../../config/wsl';
-import { database } from '../../constants';
+import { database, isUsingWsl } from '../../constants';
 
 config();
 
-const syncWslAndWindowsDatabases = () => {
-  if (process.platform !== 'linux' || !isUsingWsl) {
+const syncWslAndWindowsDatabases = (): void => {
+  if (isUsingWsl()) {
     return;
   }
 
@@ -40,4 +39,4 @@ if (process.argv.includes('--sync-wsl-and-windows-databases')) {
   syncWslAndWindowsDatabases();
 }
 
-export { syncWslAndWindowsDatabases, SyncWslAndWindowsDatabases };
+export { syncWslAndWindowsDatabases };
