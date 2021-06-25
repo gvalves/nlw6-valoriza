@@ -1,16 +1,16 @@
 import { ConnectionOptions } from 'typeorm';
 import fs from 'fs';
-import { root, database } from '../constants';
+import { rootPath, databasePath } from '../constants';
 
 const config: ConnectionOptions = {
   type: 'sqlite',
-  database,
-  migrations: [`${root}/src/database/migrations/*.ts`],
-  entities: [`${root}/src/entities/*.ts`],
+  database: databasePath,
+  migrations: [`${rootPath}/src/database/migrations/*.ts`],
+  entities: [`${rootPath}/src/entities/*.ts`],
   cli: {
-    migrationsDir: `${root}/src/database/migrations`,
-    entitiesDir: `${root}/src/entities`,
+    migrationsDir: `${rootPath}/src/database/migrations`,
+    entitiesDir: `${rootPath}/src/entities`,
   },
 };
 
-fs.writeFileSync(`${root}/ormconfig.json`, JSON.stringify(config, null, 4));
+fs.writeFileSync(`${rootPath}/ormconfig.json`, JSON.stringify(config, null, 4));
