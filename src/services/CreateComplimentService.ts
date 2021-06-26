@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { Compliment } from '../entities/Compliment';
+import { CustomError } from '../errors/CustomError';
 import { ComplimentsRepository } from '../repositories/ComplimentsRepository';
 import { UsersRepository } from '../repositories/UsersRepository';
 
@@ -21,13 +22,13 @@ class CreateComplimentService {
     const usersRepository = getCustomRepository(UsersRepository);
 
     if (user_sender === user_receiver) {
-      throw new Error('User cannot self compliment');
+      throw new CustomError('User cannot self compliment', 400);
     }
 
     const userReceiverExists = await usersRepository.findOne(user_receiver);
 
     if (!userReceiverExists) {
-      throw new Error("User receiver doesn't exists");
+      throw new CustomError("User receiver doesn't exists", 404);
     }
 
     const compliment = complimentsRepository.create({

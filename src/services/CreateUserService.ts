@@ -2,6 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 import { User } from '../entities/User';
 import { UsersRepository } from '../repositories/UsersRepository';
+import { CustomError } from '../errors/CustomError';
 
 interface IUserInterface {
   name: string;
@@ -15,7 +16,7 @@ class CreateUserService {
     const usersRepository = getCustomRepository(UsersRepository);
 
     if (!email) {
-      throw new Error('User email cannot be empty');
+      throw new CustomError('User email cannot be empty', 400);
     }
 
     const userAlreadyExists = await usersRepository.findOne({
@@ -23,7 +24,7 @@ class CreateUserService {
     });
 
     if (userAlreadyExists) {
-      throw new Error('User already exists');
+      throw new CustomError('User already exists', 400);
     }
 
     const passwordHash = await hash(password, 8);

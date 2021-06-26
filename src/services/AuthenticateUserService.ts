@@ -1,6 +1,8 @@
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { getCustomRepository } from 'typeorm';
+import { jwtSecretKey } from '../constants';
+import { CustomError } from '../errors/CustomError';
 import { UsersRepository } from '../repositories/UsersRepository';
 
 interface IAuthenticateRequest {
@@ -19,16 +21,16 @@ class AuthenticateUserService {
     });
 
     if (!user) {
-      throw new Error('Email/Password incorrect');
+      throw new CustomError('Email/Password incorrect', 400);
     }
 
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new Error('Email/Password incorrect');
+      throw new CustomError('Email/Password incorrect', 400);
     }
 
-    const token = sign({ email }, 'yypto#$wdjYTw4amTpM@RsL%aSF!yf2o', {
+    const token = sign({ email }, jwtSecretKey, {
       subject: user.id,
       expiresIn: '1d',
     });
